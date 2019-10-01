@@ -1,0 +1,125 @@
+swagger: "2.0"
+info:
+  description: "This is a backend of VIA-FAM system"
+  version: "1.0.0"
+  title: "VIA-FAM backend"
+  license:
+    name: "Apache 2.0"
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+host: "petstore.swagger.io"
+basePath: "/v1"
+tags:
+- name: "facility"
+  description: "VIA University facilities"
+schemes:
+- "https"
+- "http"
+paths:
+  /facility:
+    post:
+      tags:
+      - "facility"
+      summary: "Register a new facility in the system"
+      description: ""
+      operationId: "registerFacility"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Facility object that will be registered in the system"
+        required: true
+        schema:
+          $ref: "#/definitions/Facility"
+      responses:
+        201:
+          description: "Facility has been successfully registered"
+        400:
+          description: "Bad request"
+        409:
+          description: "Facility with a given name is already registered in the system"
+    get:
+      tags:
+      - "facility"
+      summary: "List all registered facilities in the system"
+      description: ""
+      operationId: "getFacilities"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Facility"
+  
+  /facility/{name}:
+    get:
+      tags:
+      - "facility"
+      summary: "Get facility with the given name"
+      description: ""
+      operationId: "getFacility"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "name"
+        in: "path"
+        description: "name of the registered facility"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/Facility"
+        400: 
+          description: "facility with the given name was not found"
+
+definitions:
+  Facility:
+    type: "object"
+    required:
+    - "name"
+    - "description"
+    properties:
+      name:
+        type: "string"
+        example: "Book a librarian"
+      description:
+        type: "string"
+        example: "Are you writing your final project?  Get a one-to-one session with a librarian based on your needs. The session lasts one hour. We are information professionals and will guide you:- find the most updated material on your topic - evaluate information sources - find scientific literature - develop a search strategy - obtain literature"
+      openingHours:
+        type: "array"
+        items:
+          $ref: "#/definitions/WorkingDay"
+      emailAddress:
+        type: "string"
+        example: "facility@via.dk"
+      phoneNumber:
+        type: "string"
+        example: "+45 00 00 00"
+      location:
+        type: string
+        example: "D.301"
+      additionalInfo:
+        type: "string"
+        example: "Before you send your request, you have to have a relatively planned subject, and done preliminary search for information. To help you as best as possible, please state in which databases/websites you have searched and the results."
+  WorkingDay:
+    type: "object"
+    properties:
+      dayName:
+        type: "string"
+        example: "Monday"
+      from:
+        type: "string"
+        example: "08:00"
+      to:
+        type: "string"
+        example: "11:00"
+externalDocs:
+  description: "Find out more about Swagger"
+  url: "http://swagger.io"
