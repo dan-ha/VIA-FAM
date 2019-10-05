@@ -1,0 +1,6 @@
+language: node_js
+before_install:
+  - cd $TRAVIS_BUILD_DIR/backend
+  - npm install
+script:
+  - npm test
