@@ -10,4 +10,4 @@ deploy:
   - provider: heroku
     api_key:
       secure: OWjZqhCohtz9kPj4yKuVrRhI+v+buubJjZqHeop6njCU0iSlJMtV6Tki+Do8pXuMxQoNnAPIasrMk50unn+YddEXqi2Y3zU63GU+bu9GkR8gXa7gfZQzrxlFsQkx/IjuYfNveGWU1YcNKIKByyCvf3F2AVZIZpCnRL5JWrkuvqJK4zrfGd+KOMQMpwBu7cimdTx3zuUeCgg/IZWhZ+o4JfiU2DN7FID2/Wc2fnGznNS2v+MnKCNpom1AY+IuAXsfFfjUHLNfClt80JjT52+nswscB29xCjVCcc0UbQ/96B1Y0+qyD5OU+hlu/Hh8zj30XgT8H4ZiKlofE3f3iJhOydJbgqAjAQKXDP3EKlvB/Du956+ks/grKp49Ku1qVuEM0TwPaopYQ+FcP13eoPMO9KVsqjmYA1VPuNGfMECNKcC/F9lo/sbhr7gcFQK6wre+qXw96/ycwiwEw2on4P38wchsZpUHb4PV+6v1ju6IXZbZmll1q2+0JsJGXhUtqC0B6AxbgSJ8GJPq20Up2wyhkteYaqnzJ5Ma80edPfaUSibZMcWP4kdm7uS25kLpQnoCC/6UrHPbK7cw3vaso2S1jXPCbkOZCPR87MAnTv1BizkMVkfKMZWG04SA4yjD4+6Kcj1ec+G9TRUnm7YlTdN4c70H55f9zAVNCNgqnZqj/r0=
-    app: online-diary-user-service
+    app: via-fam
