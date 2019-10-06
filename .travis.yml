@@ -1,13 +1,13 @@
 language: node_js
 node_js:
-  - '12'
+- '12'
 before_install:
-  - cd $TRAVIS_BUILD_DIR/backend
-  - npm install
+- cd $TRAVIS_BUILD_DIR/backend
+- npm install
 script:
-  - npm test
+- npm test
 deploy:
   - provider: heroku
     api_key:
-      secure: emLYMuniHw6PAQoMYJ68je+PNgnMJ+HgaX80jEBSXEcrWrLbnNhNhLZ+a2zhDewpIGaJggfI4tVkmbdzfVvcuO0LteWOE7t1mDa6QY/Ef3XTxsdTmRQN7gxmqssDVtICob2rvsFdiyD0bnXmBLdGpw6BGGfzv5ErQo6mNBeT0iduGx5x+a5M3/SSyYEg4zl/QqoAYrWP7JPO482nAoFEkRG0l01OXGo8eHqSrrbpZer0FtRNde7c8s0a9PR90iyn5xXCLABighe84vZsJe3Fdiz4zqifnrgiIQmjVQfmiiFe9WMTGW6eg1ZNB/NHlU4VXljHIvhbYv0RiEmhtQUZ512aScaMcO0Yj8CdZPpd4OKGYvbv3Yj/fDrrJJuByZoF2LtkxK9BoTXCIaS3CHNnZep6KuYoNSdzUjmsKAXFyRbdjNnBN9v4HNJ1PUxVeBd6g/HrWPkY2O50724TLjLq3Od5ZRM1lGy/dixVRzs33cT6m9Afkuv06UG82NzOXBjtPH5PdSO/n+6qMaS5kzp4tZ3RjmAHOx9TvRse3DqBSs815WG/mXQbKuZUWj0Ge98Y2LtsI3b7olYmOOez2oSQH47e4E2GcrWRa06BToldoqHJnuCw3w1fFfvah0iq506P8r5E5kCndJv/VxdwSJPaJRo/ZKGwnmwloufU9yw5Hw8=
-    app: via-fam
+      secure: OWjZqhCohtz9kPj4yKuVrRhI+v+buubJjZqHeop6njCU0iSlJMtV6Tki+Do8pXuMxQoNnAPIasrMk50unn+YddEXqi2Y3zU63GU+bu9GkR8gXa7gfZQzrxlFsQkx/IjuYfNveGWU1YcNKIKByyCvf3F2AVZIZpCnRL5JWrkuvqJK4zrfGd+KOMQMpwBu7cimdTx3zuUeCgg/IZWhZ+o4JfiU2DN7FID2/Wc2fnGznNS2v+MnKCNpom1AY+IuAXsfFfjUHLNfClt80JjT52+nswscB29xCjVCcc0UbQ/96B1Y0+qyD5OU+hlu/Hh8zj30XgT8H4ZiKlofE3f3iJhOydJbgqAjAQKXDP3EKlvB/Du956+ks/grKp49Ku1qVuEM0TwPaopYQ+FcP13eoPMO9KVsqjmYA1VPuNGfMECNKcC/F9lo/sbhr7gcFQK6wre+qXw96/ycwiwEw2on4P38wchsZpUHb4PV+6v1ju6IXZbZmll1q2+0JsJGXhUtqC0B6AxbgSJ8GJPq20Up2wyhkteYaqnzJ5Ma80edPfaUSibZMcWP4kdm7uS25kLpQnoCC/6UrHPbK7cw3vaso2S1jXPCbkOZCPR87MAnTv1BizkMVkfKMZWG04SA4yjD4+6Kcj1ec+G9TRUnm7YlTdN4c70H55f9zAVNCNgqnZqj/r0=
+    app: online-diary-user-service
