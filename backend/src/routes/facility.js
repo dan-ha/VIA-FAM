@@ -1,5 +1,6 @@
 const express = require('express')
 const { Facility, OpeningHours } = require('../model/facility.js')
+const sequelize = require('../db/sequelize.js')
 
 const router = express.Router();
 
@@ -31,28 +32,28 @@ const router = express.Router();
  *        description: Facility with the given name is already registered in the system
  */
 router.post('/', (req, res) => {
-  Facility.create(req.body, { include: [OpeningHours] })
-    .then((facility => {
-      res.status(201).json(facility)
-    }))
-    .catch(error => {
-      switch (error.name) {
-        case 'SequelizeValidationError': {
-          res.status(400)
-          break
-        }
-        case 'SequelizeUniqueConstraintError': {
-          res.status(409)
-          break
-        }
-        default: {
-          res.status(500)
-          break
-        }
+  sequelize.transaction(transaction =>
+    Facility.create(req.body, { include: [OpeningHours], transaction })
+  ).then((facility) => {
+    return res.status(201).json(facility)
+  }).catch(error => {
+    switch (error.name) {
+      case 'SequelizeValidationError': {
+        res.status(400)
+        break
       }
-      res.send(error)
-      //res.send(error.errors.map(err => err.message))
-    })
+      case 'SequelizeUniqueConstraintError': {
+        res.status(409)
+        break
+      }
+      default: {
+        res.status(500)
+        break
+      }
+    }
+    res.send(error)
+    //res.send(error.errors.map(err => err.message))
+  })
 })
 
 /**
