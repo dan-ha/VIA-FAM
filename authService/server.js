@@ -27,3 +27,4 @@ function getUser(username) {
 }
 
 app.listen(PORT, () => console.log(`VIA authentication service(mock) is successfully listening on the port: ${PORT}`))
+module.exports = app
