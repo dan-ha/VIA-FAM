@@ -10,7 +10,7 @@ describe('GET /authenticate', function () {
     it('should return true for matching username/password', function (done) {
         request(app)
             .get('/authenticate')
-            .send({ username: user.username, password: user.password })
+            .query({ username: user.username, password: user.password })
             .expect(200)
             .end(function (err, res) {
                 should.not.exist(err)
@@ -22,7 +22,7 @@ describe('GET /authenticate', function () {
     it('should return false for not matching username/password', function (done) {
         request(app)
             .get('/authenticate')
-            .send({ username: user.username, password: 'wrongPassword' })
+            .query({ username: user.username, password: 'wrongPassword' })
             .expect(200)
             .end(function (err, res) {
                 should.not.exist(err)
@@ -34,7 +34,7 @@ describe('GET /authenticate', function () {
     it('should return false for non existing username', function (done) {
         request(app)
             .get('/authenticate')
-            .send({ username: 'nonExistingUser', password: 'password' })
+            .query({ username: 'nonExistingUser', password: 'password' })
             .expect(200)
             .end(function (err, res) {
                 should.not.exist(err)
