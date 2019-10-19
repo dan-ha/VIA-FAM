@@ -4,8 +4,11 @@ node_js:
 before_install:
 - cd $TRAVIS_BUILD_DIR/backend
 - npm install
+- cd $TRAVIS_BUILD_DIR/authService
+- npm install
+- cd $TRAVIS_BUILD_DIR
 script:
-- npm test
+- sh test.sh
 deploy:
   - provider: heroku
     api_key:
