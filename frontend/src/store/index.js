@@ -40,6 +40,17 @@ export default new Vuex.Store({
                 .catch(error => {
                     context.commit('API_DATA_FAILURE', error)
                 })
+        },
+        fetchFacility: ({commit, getters}, name) => {
+            if(!getters.getFacility(name)) {
+                return axios.get(`${process.env.VUE_APP_BACKEND_URL}/facility/${name}`)
+                    .then(response => {
+                        commit('API_DATA_SUCCESS', [response.data])
+                    })
+                    .catch(error => {
+                        commit('API_DATA_FAILURE', error)
+                    })
+            }
         }
     }
 })
