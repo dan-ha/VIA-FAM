@@ -1,14 +1,17 @@
 language: node_js
 node_js:
 - '12'
-before_install:
+install:
 - cd $TRAVIS_BUILD_DIR/backend
 - npm install
 - cd $TRAVIS_BUILD_DIR/authService
 - npm install
+before_script:
 - cd $TRAVIS_BUILD_DIR
 script:
-- sh test.sh
+- sh scripts/run-tests.sh
+before_deploy:
+- cd $TRAVIS_BUILD_DIR/backend
 deploy:
   - provider: heroku
     api_key:
