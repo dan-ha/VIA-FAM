@@ -9,19 +9,19 @@
         "username": "facilitator1",
         "password": "facilitator1",
         "name": "Facilitator1 Facilitator1",
-        "type": "facilitator"
+        "type": "employee"
     },
     {
         "username": "facilitator2",
         "password": "facilitator2",
         "name": "Facilitator2 Facilitator2",
-        "type": "facilitator"
+        "type": "employee"
     },
     {
         "username": "facilitator3",
         "password": "facilitator3",
         "name": "Facilitator3 Facilitator3",
-        "type": "facilitator"
+        "type": "employee"
     },
     {
         "username": "123456",

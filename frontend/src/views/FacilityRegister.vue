@@ -22,6 +22,8 @@
           </v-text-field>
 
           <OpeningHours ref="openingHours"></OpeningHours>
+          <Facilitators ref="facilitators" @change="selectedFacilitator" ></Facilitators>
+          
 
           <div class="d-flex">
             <v-text-field
@@ -64,11 +66,13 @@
 <script>
 import { mapActions } from "vuex";
 import OpeningHours from "@/components/OpeningHours.vue";
+import Facilitators from "@/components/Facilitators.vue";
 import axios from "axios";
 
 export default {
   name: "FacilityRegister",
   data: () => ({
+    nOfFacilitators: 1,
     loading: false,
     valid: true,
     name: '',
@@ -81,6 +85,7 @@ export default {
     descriptionRules: [
       v => !!v || 'Description is required'
     ],
+    facilitators: [],
     email: "email@address.com",
     emailRules: [
       v => /.+@.+\..+/.test(v) || "E-mail must be valid"
@@ -97,6 +102,9 @@ export default {
   }),
   methods: {
     ...mapActions(["fetchFacilities"]),
+    data: () => ({
+      model: Facilitators.model
+    }),
     submit() {
       if (this.$refs.form.validate()) {
         this.register()
@@ -133,12 +141,17 @@ export default {
         emailAddress: this.email,
         phoneNo: this.phone,
         location: this.location,
-        additionalInfo: this.additionalInfo
+        additionalInfo: this.additionalInfo + this.facilitators
       }
+    },
+    selectedFacilitator(facilitators) {
+      console.log('New facilitator selected' + facilitators)
+      this.facilitators = facilitators
     }
   },
   components: {
-    OpeningHours
+    OpeningHours,
+    Facilitators
   }
 };
 </script>

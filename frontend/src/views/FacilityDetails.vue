@@ -8,7 +8,8 @@
       <p>{{facility.additionalInfo}}</p>
     </v-card-text>
     <v-card-actions>
-      <v-btn color="primary">Make an appointment</v-btn>
+      <!-- <v-btn color="primary" @click="this.$router.push({path:'../calendar',params:{ appointments = this.facility.appointments }})">Make an appointment</v-btn> -->
+      <v-btn color="primary" @click="showCalendar">Make an appointment</v-btn>
     </v-card-actions>
   </v-card>
 </template>
@@ -22,6 +23,16 @@ export default {
     facility: function() {
       return store.getters.facility(this.$route.params.name);
     }
+  },
+  methods: {
+    showCalendar(){
+      console.log(this.facility.name + 'a')
+      var fac = this.facility.name
+      this.$router.push('/')  // without this, it doesn't go back
+      this.$router.push({name: 'calendar', params:{facility: fac}})
+      //console.log(this.facility.name + 'b')
+    }
   }
 };
+
 </script>
