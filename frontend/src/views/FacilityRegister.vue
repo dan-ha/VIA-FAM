@@ -106,6 +106,7 @@ export default {
       this.loading = true;
       try{
         const response = await axios.post(`${process.env.VUE_APP_BACKEND_URL}/facility`, this.getFacility())
+        console.log(response)
         this.loading = false
         this.fetchFacilities()
         this.$router.push('/')
