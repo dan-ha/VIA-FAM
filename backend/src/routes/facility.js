@@ -88,7 +88,7 @@ router.get('/', (req, res) => {
  *        schema:
  *          $ref: '#/definitions/Facility'
  *      '404':
- *        description: facility with the given name was not found
+ *        description: Facility with the given name was not found
  */
 router.get('/:name', (req, res) => {
   let { name } = req.params
@@ -111,6 +111,9 @@ router.get('/:name', (req, res) => {
  *          required:
  *          - name
  *          - description
+ *          - emailAddress
+ *          - phoneNo
+ *          - location
  *          properties:
  *              name:
  *                  type: string

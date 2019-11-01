@@ -76,6 +76,10 @@ const Appointment = sequelize.define('appointments', {
     document: {
         type: Sequelize.BLOB,
         allowNull: true
+    },
+    studentId: {
+        type: Sequelize.STRING,
+        allowNull: false
     }
 }, {
     timestamps: false,
@@ -101,4 +105,4 @@ Facilitator.hasMany(UnavailableHours)
 sequelize.sync()
 
 
-module.exports = { Facility, OpeningHours }
+module.exports = { Facility, OpeningHours, Facilitator, Appointment }
