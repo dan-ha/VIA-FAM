@@ -10,7 +10,6 @@ const swaggerOptions = {
             servers: [`http://localhost:3000`]
         },
     },
-    // ['.routes/*.js'] - this we can use in the future when routes will be separated
     apis: ["./src/routes/*.js"]
 }
 const swaggerDocs = swaggerJsDoc(swaggerOptions)

@@ -104,5 +104,4 @@ Facilitator.hasMany(Appointment)
 Facilitator.hasMany(UnavailableHours)
 sequelize.sync()
 
-
 module.exports = { Facility, OpeningHours, Facilitator, Appointment }
