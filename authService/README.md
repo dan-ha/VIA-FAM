@@ -2,7 +2,7 @@
 Mock of the authentication service, which serves hardcoded data from ./dummyData.json file
 
 ### GET /authenticate
-Request body - {"username": "username", "password": "password"}  
+Request query - ?username=username&password=password  
 Response - {"authenticated": true/false}
 
 ### GET /user/:username

@@ -1,0 +1,27 @@
+<template>
+  <v-app-bar app>
+    <v-toolbar-title class="headline text-uppercase">
+      <router-link to="/">Facility Appointment Manager</router-link>
+    </v-toolbar-title>
+    <v-spacer></v-spacer>
+    <v-btn v-if="authenticated" color="primary" @click="logOut">Log out</v-btn>
+  </v-app-bar>
+</template>
+
+<script>
+import { mapGetters, mapMutations } from "vuex";
+
+export default {
+  name: "AppBar",
+  computed: {
+    ...mapGetters(["authenticated"])
+  },
+  methods: {
+    ...mapMutations(["LOGGED_OUT"]),
+    logOut() {
+      this.LOGGED_OUT();
+      this.$router.push("/login");
+    }
+  }
+};
+</script>

@@ -1,5 +1,5 @@
 <template>
-  <v-card class="mx-auto" max-width="500">
+  <v-card v-if="facility" class="mx-auto" max-width="500">
     <v-card-text>
       <div class="display-1 text--primary">{{ facility.name }}</div>
       <p class="text--primary">{{ facility.description }}</p>
@@ -14,14 +14,21 @@
 </template>
 
 <script>
-import store from "@/store";
+import { mapActions } from "vuex";
+import store from '@/store'
 
 export default {
   name: "facilityDetails",
-  computed: {
+    computed: {
     facility: function() {
       return store.getters.facility(this.$route.params.name);
     }
+  },
+  methods: {
+    ...mapActions(["fetchFacility"]),
+  },
+  created() {
+    this.fetchFacility(this.$route.params.name)
   }
 };
 </script>
