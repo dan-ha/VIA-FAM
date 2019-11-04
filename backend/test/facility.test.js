@@ -15,7 +15,12 @@ const facility = {
   facilitators: []
 }
 
-describe('route /facility', function () {
+describe('route /facility', async function () {
+
+  before(async () => {
+    const sequelize = require('../src/db/sequelize.js')
+    await sequelize.sync()
+  })
 
   describe('POST /facility', function () {
     it('should register new facility, and return it with 201', function (done) {
