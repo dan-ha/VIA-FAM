@@ -40,5 +40,5 @@ function getUser(username) {
     return data.find((d) => d.username == username)
 }
 
-app.listen(PORT, () => console.log(`VIA authentication service(mock) is successfully listening on the port: ${port}`))
+app.listen(port, () => console.log(`VIA authentication service(mock) is successfully listening on the port: ${port}`))
 module.exports = app
