@@ -3,8 +3,6 @@ import Router from 'vue-router'
 import store from '@/store/'
 
 const ROLE_ADMIN = 'admin'
-const ROLE_EMPLOYEE = 'employee'
-const ROLE_STUDENT = 'student'
 
 Vue.use(Router)
 
