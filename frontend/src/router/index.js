@@ -30,9 +30,9 @@ const router = new Router({
       beforeEnter: requireAuth
     },
     {
-      path: '/register',
-      name: 'register',
-      component: () => import('@/views/FacilityRegister.vue'),
+      path: '/adminPanel',
+      name: 'adminPanel',
+      component: () => import ('@/views/AdminPanel.vue'),
       meta: { authorizeRole: ROLE_ADMIN },
       beforeEnter: requireAuth
     },

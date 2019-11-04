@@ -40,6 +40,8 @@ export default new Vuex.Store({
         LOGGED_OUT: (state) => {
             state.authenticated = false
             localStorage.setItem('authenticated', state.authenticated)
+            state.user = null
+            localStorage.removeItem('user')
         },
         SET_USER: (state, user) => {
             state.user = user

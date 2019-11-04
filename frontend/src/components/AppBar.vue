@@ -4,6 +4,7 @@
       <router-link to="/">Facility Appointment Manager</router-link>
     </v-toolbar-title>
     <v-spacer></v-spacer>
+    <router-link v-if="user && user.role === 'admin'" to="/adminPanel" class="v-btn pa-2 mr-5">Admin Panel</router-link>
     <v-btn v-if="authenticated" color="primary" @click="logOut">Log out</v-btn>
   </v-app-bar>
 </template>
@@ -14,7 +15,7 @@ import { mapGetters, mapMutations } from "vuex";
 export default {
   name: "AppBar",
   computed: {
-    ...mapGetters(["authenticated"])
+    ...mapGetters(["authenticated", "user"])
   },
   methods: {
     ...mapMutations(["LOGGED_OUT"]),

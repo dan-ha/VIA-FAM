@@ -1,4 +1,3 @@
-import { mapActions } from 'vuex';
 <template>
   <v-app>
     <AppBar />
