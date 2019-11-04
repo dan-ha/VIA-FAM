@@ -70,12 +70,15 @@ describe('GET /user', function () {
     })
 
     it('should returne filtered by role', function (done) {
+        // Arrange
+        const role = 'employee'
+        const length = users.filter(d => d.role === role).length
         request(app)
-            .get('/user?role=employee')
+            .get(`/user?role=${role}`)
             .expect(200)
             .end(function (err, res) {
                 should.not.exist(err)
-                should.equal(res.body.length, 3)
+                should.equal(res.body.length, length)
                 done()
             })
     })
