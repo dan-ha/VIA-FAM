@@ -1,5 +1,5 @@
 const express = require('express')
-const PORT = 3001
+const port = process.env.PORT || 3001
 const data = require('./dummyData.json')
 
 const app = express()
@@ -40,5 +40,5 @@ function getUser(username) {
     return data.find((d) => d.username == username)
 }
 
-app.listen(PORT, () => console.log(`VIA authentication service(mock) is successfully listening on the port: ${PORT}`))
+app.listen(PORT, () => console.log(`VIA authentication service(mock) is successfully listening on the port: ${port}`))
 module.exports = app
