@@ -9,19 +9,37 @@
         "username": "facilitator",
         "password": "facilitator",
         "name": "Facilitator Facilitator",
-        "role": "facilitator"
+        "role": "employee"
     },
     {
         "username": "facilitator2",
         "password": "facilitator2",
         "name": "Facilitator2 Facilitator2",
-        "role": "facilitator"
+        "role": "employee"
     },
     {
         "username": "facilitator3",
         "password": "facilitator3",
         "name": "Facilitator3 Facilitator3",
-        "role": "facilitator"
+        "role": "employee"
+    },
+    {
+        "username": "facilitator4",
+        "password": "facilitator4",
+        "name": "Facilitator4 Facilitator4",
+        "role": "employee"
+    },
+    {
+        "username": "facilitator5",
+        "password": "facilitator5",
+        "name": "Facilitator5 Facilitator5",
+        "role": "employee"
+    },
+    {
+        "username": "facilitator6",
+        "password": "facilitator6",
+        "name": "Facilitator6 Facilitator6",
+        "role": "employee"
     },
     {
         "username": "student",

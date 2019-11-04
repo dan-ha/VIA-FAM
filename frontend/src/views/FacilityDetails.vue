@@ -8,7 +8,12 @@
       <p>{{facility.additionalInfo}}</p>
     </v-card-text>
     <v-card-actions>
-      <v-btn color="primary">Make an appointment</v-btn>
+      <v-btn 
+        v-if="facility.appointmentManager" 
+        color="primary"
+      >
+      Make an appointment
+      </v-btn>
     </v-card-actions>
   </v-card>
 </template>

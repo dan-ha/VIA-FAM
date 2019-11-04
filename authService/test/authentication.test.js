@@ -52,7 +52,7 @@ describe('GET /user', function () {
             .expect(200)
             .end(function (err, res) {
                 should.not.exist(err)
-                const userCopy = {...user}
+                const userCopy = { ...user }
                 delete userCopy.password
                 should.deepEqual(res.body, userCopy)
                 done()
@@ -65,6 +65,17 @@ describe('GET /user', function () {
             .expect(404)
             .end(function (err, res) {
                 should.not.exist(err)
+                done()
+            })
+    })
+
+    it('should returne filtered by role', function (done) {
+        request(app)
+            .get('/user?role=employee')
+            .expect(200)
+            .end(function (err, res) {
+                should.not.exist(err)
+                should.equal(res.body.length, 3)
                 done()
             })
     })

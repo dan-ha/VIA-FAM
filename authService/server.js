@@ -17,6 +17,15 @@ app.get('/authenticate', (req, res) => {
     res.send({ authenticated })
 })
 
+app.get('/user', (req, res) => {
+    if(req.query.role) {
+        const result = data.filter((d) => d.role === req.query.role)
+        res.send(result)
+    } else {
+        res.status(400).send()
+    }
+})
+
 app.get('/user/:username', (req, res) => {
     const user = { ...getUser(req.params.username) }
     if (Object.keys(user).length === 0) {
