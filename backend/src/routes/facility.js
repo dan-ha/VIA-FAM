@@ -1,5 +1,5 @@
 const express = require('express')
-const { Facility, OpeningHours } = require('../model/facility.js')
+const { Facility, OpeningHours, Facilitator, Service } = require('../model/facility.js')
 const sequelize = require('../db/sequelize.js')
 
 const router = express.Router();
@@ -32,9 +32,9 @@ const router = express.Router();
  *        description: Facility with the given name is already registered in the system
  */
 router.post('/', (req, res) => {
-  sequelize.transaction(transaction =>
-    Facility.create(req.body, { include: [OpeningHours], transaction })
-  ).then((facility) => {
+  sequelize.transaction(transaction => {
+    return Facility.create(req.body, { include: [OpeningHours, Facilitator, Service], transaction })
+  }).then((facility) => {
     return res.status(201).json(facility)
   }).catch(error => {
     switch (error.name) {
@@ -72,7 +72,7 @@ router.post('/', (req, res) => {
  *            $ref: '#/definitions/Facility'
  */
 router.get('/', (req, res) => {
-  Facility.findAll({ include: [OpeningHours] }).then((facilities) => {
+  Facility.findAll({ include: [OpeningHours, Facilitator, Service] }).then((facilities) => {
     res.json(facilities)
   })
 })
@@ -92,13 +92,70 @@ router.get('/', (req, res) => {
  */
 router.get('/:name', (req, res) => {
   let { name } = req.params
-  Facility.findByPk(name, { include: [OpeningHours] }).then((facility) => {
+  Facility.findByPk(name, { include: [OpeningHours, Facilitator, Service] }).then((facility) => {
     if (facility) {
       res.status(200).json(facility)
     } else {
       res.status(404).send()
     }
   })
+})
+
+/**
+ * @swagger
+ *
+ *  /facility/{name}:
+ *  patch:
+ *    description: Update facility with the given name
+ *    consumes:
+ *      - application/json
+ *    produces:
+ *      - application/json
+ *    parameters:
+ *      - name: body
+ *        description: Updated version of the facility
+ *        in: body
+ *        required: true
+ *        schema:
+ *          $ref: '#/definitions/Facility'
+ *    responses:
+ *      '200':
+ *        description: Facility has been successfully updated
+ *        schema:
+ *          $ref: '#/definitions/Facility'
+ *      '404':
+ *        description: Facility not found
+ *      '500':
+ *        description: Internal server error
+ */
+router.patch('/:name', async (req, res) => {
+  try {
+    let facility = await Facility.findByPk(req.params.name, { include: [OpeningHours, Facilitator, Service] })
+    if (facility) {
+      await sequelize.transaction(transaction => {
+        if(req.body.name) delete req.body.name
+        return Facility.update(req.body, { where: { name: req.params.name } }, transaction)
+          .then(transaction => {
+            if (req.body.facilitators) {
+              return Facilitator.bulkCreate(req.body.facilitators, transaction)
+                .then(transaction => {
+                  if(req.body.services) {
+                    return Service.bulkCreate(req.body.services, transaction)
+                  }
+                })
+            }
+          })
+      })
+      await facility.reload()
+      res.send(facility)
+    } else {
+      res.status(404)
+      res.send()
+    }
+  } catch (error) {
+    res.status(500)
+    res.send(error)
+  }
 })
 
 

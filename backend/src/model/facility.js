@@ -25,6 +25,11 @@ const Facility = sequelize.define('facilities', {
     additionalInfo: {
         type: Sequelize.STRING,
         allowNull: true
+    },
+    appointmentManager: {
+        type: Sequelize.BOOLEAN,
+        allowNull: false,
+        defaultValue: false
     }
 }, {
     timestamps: false,
@@ -56,6 +61,15 @@ const Facilitator = sequelize.define('facilitators', {
     timestamps: false,
 })
 
+const Service = sequelize.define('services', {
+    service: {
+        type: Sequelize.STRING,
+        allowNull: false
+    }
+}, {
+    timestamps: false
+})
+
 const Appointment = sequelize.define('appointments', {
     date: {
         type: Sequelize.DATE,
@@ -85,23 +99,10 @@ const Appointment = sequelize.define('appointments', {
     timestamps: false,
 })
 
-const UnavailableHours = sequelize.define('unavailableHours', {
-    date: {
-        type: Sequelize.DATE,
-        allowNull: false
-    },
-    duration: {
-        type: Sequelize.INTEGER,
-        allowNull: false
-    }
-}, {
-    timestamps: false,
-})
-
 Facility.hasMany(OpeningHours)
 Facility.hasMany(Facilitator)
+Facility.hasMany(Service)
 Facilitator.hasMany(Appointment)
-Facilitator.hasMany(UnavailableHours)
 sequelize.sync()
 
-module.exports = { Facility, OpeningHours, Facilitator, Appointment }
+module.exports = { Facility, OpeningHours, Facilitator, Service, Appointment }

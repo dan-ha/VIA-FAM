@@ -10,7 +10,7 @@ describe('GET /authenticate', function () {
     it('should return true for matching username/password', function (done) {
         request(app)
             .get('/authenticate')
-            .send({ username: user.username, password: user.password })
+            .query({ username: user.username, password: user.password })
             .expect(200)
             .end(function (err, res) {
                 should.not.exist(err)
@@ -22,7 +22,7 @@ describe('GET /authenticate', function () {
     it('should return false for not matching username/password', function (done) {
         request(app)
             .get('/authenticate')
-            .send({ username: user.username, password: 'wrongPassword' })
+            .query({ username: user.username, password: 'wrongPassword' })
             .expect(200)
             .end(function (err, res) {
                 should.not.exist(err)
@@ -34,7 +34,7 @@ describe('GET /authenticate', function () {
     it('should return false for non existing username', function (done) {
         request(app)
             .get('/authenticate')
-            .send({ username: 'nonExistingUser', password: 'password' })
+            .query({ username: 'nonExistingUser', password: 'password' })
             .expect(200)
             .end(function (err, res) {
                 should.not.exist(err)
@@ -52,7 +52,7 @@ describe('GET /user', function () {
             .expect(200)
             .end(function (err, res) {
                 should.not.exist(err)
-                const userCopy = {...user}
+                const userCopy = { ...user }
                 delete userCopy.password
                 should.deepEqual(res.body, userCopy)
                 done()
@@ -65,6 +65,20 @@ describe('GET /user', function () {
             .expect(404)
             .end(function (err, res) {
                 should.not.exist(err)
+                done()
+            })
+    })
+
+    it('should returne filtered by role', function (done) {
+        // Arrange
+        const role = 'employee'
+        const length = users.filter(d => d.role === role).length
+        request(app)
+            .get(`/user?role=${role}`)
+            .expect(200)
+            .end(function (err, res) {
+                should.not.exist(err)
+                should.equal(res.body.length, length)
                 done()
             })
     })
