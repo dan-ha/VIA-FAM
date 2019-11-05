@@ -60,7 +60,7 @@ export default new Vuex.Store({
                 })
         },
         fetchFacility: ({ commit, getters }, name) => {
-            if (!getters.getFacility(name)) {
+            if (!getters.facility(name)) {
                 return axios.get(`${process.env.VUE_APP_BACKEND_URL}/facility/${name}`)
                     .then(response => {
                         commit('API_DATA_SUCCESS', [response.data])

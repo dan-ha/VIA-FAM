@@ -39,6 +39,12 @@ const router = new Router({
       name: 'facilityDetails',
       component: () => import('@/views/FacilityDetails.vue'),
       beforeEnter: requireAuth
+    },
+    {
+      path: '/facility/:name/calendar',
+      name: 'facilityCalendar',
+      component: () => import('@/views/FacilityCalendar.vue'),
+      beforeEnter: requireAuth
     }
   ]
 })
