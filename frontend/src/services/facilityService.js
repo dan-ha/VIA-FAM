@@ -23,4 +23,18 @@ async function activateAM(facilityName, ser, facilitatorUsernames) {
   return updated
 }
 
-export default { register, activateAM }
+async function bookAppointment(appointment) {
+  const response = await axiosIns.post(`/appointment`, appointment)
+  return response.data
+}
+
+async function getAppointments(facilitator) {
+  const response = await axiosIns.get('/appointment', {
+    params: {
+      facilitator,
+    }
+  })
+  return response.data
+}
+
+export default { register, activateAM, bookAppointment, getAppointments }

@@ -75,6 +75,10 @@ const Appointment = sequelize.define('appointments', {
         type: Sequelize.DATE,
         allowNull: false
     },
+    duration: {
+        type: Sequelize.INTEGER,
+        allowNull: false
+    },
     location: {
         type: Sequelize.STRING,
         allowNull: true
@@ -90,6 +94,10 @@ const Appointment = sequelize.define('appointments', {
     document: {
         type: Sequelize.BLOB,
         allowNull: true
+    },
+    studentId: {
+        type: Sequelize.STRING,
+        allowNull: false
     }
 }, {
     timestamps: false,
@@ -101,5 +109,4 @@ Facility.hasMany(Service)
 Facilitator.hasMany(Appointment)
 sequelize.sync()
 
-
-module.exports = { Facility, OpeningHours, Facilitator, Service }
+module.exports = { Facility, OpeningHours, Facilitator, Service, Appointment }

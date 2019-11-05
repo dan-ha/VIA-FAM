@@ -1,6 +1,13 @@
 <template>
-  <div id="app">
-    <AppointmentDialog :display='appointmentDialog' :event='selectedEvent' :facility='facility' @close='appointmentDialog = false'/>
+  <div id="app" v-if="facility">
+    <AppointmentDialog
+      :display="appointmentDialog"
+      :event="selectedEvent"
+      :location="facility.location"
+      :facilitator="facility.facilitators[0]"
+      @close="appointmentDialog = false"
+      @refresh="refresh"
+    />
     <v-app id="inspire">
       <v-row class="fill-height">
         <v-col>
@@ -21,7 +28,7 @@
               ref="calendar"
               v-model="focus"
               color="primary"
-              :events="availableEvents"
+              :events="events"
               :event-color="getEventColor"
               :event-margin-bottom="3"
               :now="today"
@@ -34,30 +41,37 @@
         </v-col>
       </v-row>
     </v-app>
-        {{facility}}
-    <br />
-    <br />
-    {{availableEvents}}
   </div>
 </template>
 
 <script>
-import AppointmentDialog from '@/components/AppointmentDialog.vue'
-import moment from 'moment'
+import moment from "moment";
+import facilityService from "@/services/facilityService.js";
+import AppointmentDialog from "@/components/AppointmentDialog.vue";
 
 export default {
   name: "calendar",
   props: {
     facility: Object
   },
+  watch: {
+    facility: function() {
+      this.getAppointments();
+      if (this.$refs.calendar) {
+        this.$refs.calendar.checkChange();
+        this.$refs.calendar.scrollToTime("07:00");
+      }
+    }
+  },
   data: () => ({
-    today: moment().format('YYYY-MM-DD'),
-    focus: moment().format('YYYY-MM-DD'),
+    today: moment().format("YYYY-MM-DD"),
+    focus: moment().format("YYYY-MM-DD"),
     start: null,
     end: null,
     days: [1, 2, 3, 4, 5],
     appointmentDialog: false,
-    selectedEvent: null
+    selectedEvent: null,
+    appointments: []
   }),
   computed: {
     title() {
@@ -85,44 +99,63 @@ export default {
         month: "long"
       });
     },
-    availableEvents() {
-      let availableSlots = [];
-      let generateOh = this.generateOpeningHours
-      let start = this.start
-      if (this.facility && start) {
-        this.facility.openingHours.forEach( oh => {
-          availableSlots.push(...generateOh(oh, start))
-        });
+    events() {
+      let events = [];
+
+      let generateAE = this.generateAppointmentEvent;
+      this.appointments.forEach(a => events.push(generateAE(a)));
+
+      if (this.start) {
+        let generateOH = this.generateOHEvents;
+        let monday = this.start;
+        this.facility.openingHours.forEach(oh =>
+          events.push(...generateOH(events, oh, monday))
+        );
       }
-      return availableSlots;
+
+      return events;
     }
   },
-  mounted() {
-    this.$refs.calendar.checkChange();
-    this.$refs.calendar.scrollToTime("07:00");
-  },
   methods: {
-    generateOpeningHours(openingHours, mondayDate) {
-      const events = []
-      let date = moment(`${mondayDate.date} ${openingHours.timeOpen}`, 'YYYY-MM-DD HH:mm')
-      date.add(openingHours.dayOfWeek - 1, 'days')
-      for(let i = 0; i < openingHours.duration / 60; i++) {
-        const start = date.format('YYYY-MM-DD HH:mm')
-        date.add(60, 'minutes')
-        const end = date.format('YYYY-MM-DD HH:mm')
-        events.push({name: 'Available', start, end, available: true})
+    generateOHEvents(appointments, openingHours, mondayDate) {
+      const events = [];
+      let date = moment(`${mondayDate.date} ${openingHours.timeOpen}`, "YYYY-MM-DD HH:mm");
+      date.add(openingHours.dayOfWeek - 1, "days");
+      for (let i = 0; i < openingHours.duration / 60; i++) {
+        const start = date.format("YYYY-MM-DD HH:mm");
+        date.add(60, "minutes");
+        const end = date.format("YYYY-MM-DD HH:mm");
+        if (!appointments.map(a => a.start).includes(start)) {
+          events.push({ name: "Available", start, end, available: true });
+        }
       }
-      return events
+      return events;
+    },
+    generateAppointmentEvent(appointment) {
+      let date = moment(appointment.date);
+      let start = date.format("YYYY-MM-DD HH:mm");
+      date.add(appointment.duration, "minutes");
+      let end = date.format("YYYY-MM-DD HH:mm");
+      return { name: "Appointment", start, end, available: false };
+    },
+    async getAppointments() {
+      this.appointments = await facilityService.getAppointments(
+        this.facility.facilitators[0].employeeId
+      );
     },
     showEvent(event) {
-      this.appointmentDialog = false
-      this.appointmentDialog = true
-      this.selectedEvent = null
-      this.selectedEvent = event.event
-      console.log(JSON.stringify(event));
+      let calendarEvent = event.event;
+      if (calendarEvent.available) {
+        this.appointmentDialog = false;
+        this.appointmentDialog = true;
+        this.selectedEvent = null;
+        this.selectedEvent = calendarEvent;
+      } else {
+        console.log("not available");
+      }
     },
     getEventColor(event) {
-      return event.available ? 'green' : 'red'
+      return event.available ? "green" : "red";
     },
     setToday() {
       this.focus = this.today;
@@ -142,6 +175,16 @@ export default {
       return d > 3 && d < 21
         ? "th"
         : ["th", "st", "nd", "rd", "th", "th", "th", "th", "th", "th"][d % 10];
+    },
+    refresh() {
+      this.getAppointments();
+    }
+  },
+  mounted() {
+    if (this.facility) {
+      this.getAppointments();
+      this.$refs.calendar.checkChange();
+      this.$refs.calendar.scrollToTime("07:00");
     }
   },
   components: {

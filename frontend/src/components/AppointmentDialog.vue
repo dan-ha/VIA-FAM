@@ -22,6 +22,9 @@
               <v-col cols="12" sm="6">
                 <v-text-field label="Until" :value="to" disabled></v-text-field>
               </v-col>
+              <v-col cols="12" sm="12">
+                <v-text-field label="Facilitator" :value="facilitator.employeeId" disabled></v-text-field>
+              </v-col>
               <v-col cols="12" sm="5">
                 <v-text-field :value="location" label="Location" prepend-icon="place" disabled></v-text-field>
               </v-col>
@@ -29,7 +32,13 @@
                 <v-text-field v-model="optionalLocation" label="Optional location"></v-text-field>
               </v-col>
               <v-col cols="12">
-                <v-textarea outlined v-model="description" counter="1000" label="Description"></v-textarea>
+                <v-textarea
+                  outlined
+                  v-model="description"
+                  :rules="descriptionRules"
+                  counter="1000"
+                  label="Description"
+                ></v-textarea>
               </v-col>
             </v-row>
           </v-form>
@@ -39,19 +48,23 @@
       <v-card-actions>
         <v-spacer></v-spacer>
         <v-btn color="blue" text @click="close">Cancel</v-btn>
-        <v-btn color="blue" text @click="reserve">Reserve</v-btn>
+        <v-btn color="blue" text @click="book">Book</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
 </template>
 
 <script>
+import { mapGetters } from "vuex";
+import facilityService from "@/services/facilityService.js";
+
 export default {
   name: "appointmentDialog",
   props: {
     display: Boolean,
     event: Object,
-    facility: Object
+    facilitator: Object,
+    location: String
   },
   computed: {
     from() {
@@ -60,9 +73,7 @@ export default {
     to() {
       return this.event ? this.event.end : "";
     },
-    location() {
-      return this.facility ? this.facility.location : "";
-    }
+    ...mapGetters(["user"])
   },
   data() {
     return {
@@ -79,17 +90,19 @@ export default {
     };
   },
   methods: {
-    async reserve() {
-      // if (this.$refs.form.validate()) {
-      //   try {
-      //     await facilityService.register(this.getAppointment());
-      //     this.reset();
-      //     this.$emit("registered");
-      //   } catch (error) {
-      //     this.alert = true;
-      //     console.log(error);
-      //   }
-      // }
+    async book() {
+      if (this.$refs.form.validate()) {
+        try {
+          let res = await facilityService.bookAppointment(
+            this.getAppointment()
+          );
+          this.reset();
+          this.$emit("refresh");
+        } catch (error) {
+          this.alert = true;
+          console.log(error);
+        }
+      }
     },
     close() {
       this.reset();
@@ -104,9 +117,13 @@ export default {
     },
     getAppointment() {
       return {
+        date: new Date(this.from).toISOString(),
+        duration: 60,
+        location: this.optionalLocation ? this.optionalLocation : this.location,
         subject: this.subject,
         description: this.description,
-        location: this.location
+        studentId: this.user.username,
+        facilitatorEmployeeId: this.facilitator.employeeId
       };
     }
   }
