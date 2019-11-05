@@ -26,6 +26,7 @@ describe('routes /appointment', function () {
 
         appointment = {
             date: new Date(2019, 11, 12, 8, 0, 0).toISOString(),
+            duration: 60,
             location: 'test',
             subject: 'appointment test',
             description: 'appoointment.test.js',

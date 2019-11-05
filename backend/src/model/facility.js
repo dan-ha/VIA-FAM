@@ -75,6 +75,10 @@ const Appointment = sequelize.define('appointments', {
         type: Sequelize.DATE,
         allowNull: false
     },
+    duration: {
+        type: Sequelize.INTEGER,
+        allowNull: false
+    },
     location: {
         type: Sequelize.STRING,
         allowNull: true
