@@ -1,148 +1,151 @@
 <template>
-   <v-row>
-     {{facility}}
-    aaaaaaa {{facility.name}}
-    <v-col>
-      <v-sheet height="400">
-        <v-calendar
-          ref="calendar"
-          :now="today"
-          :value="today"
-          :events="events"
-          color="primary"
-          event-color="purple"
-          type="week"
-        >
-        <!-- the events that are showing when the facility isn't working -->
-
-          <!-- the events at the top (all-day) -->
-          <template v-slot:day-header="{ date }">
-            <template v-for="event in eventsMap[date]">
-              <!-- all day events don't have time -->
-              <div
-                v-if="!event.time"
-                :key="event.title"
-                class="my-event"
-                @click="open(event)"
-                v-html="event.title"
-              ></div>
-            </template>
-          </template>
-          <template v-slot:day-body="{date, timetoY, minutesToPixels}">
-            <template v-for="event in eventsMap[date]">
-              <div
-                v-if="event.time"
-                :key="event.title"
-                :style="{ top: timeToY(event.time) + 'px', height: minutesToPixels(event.duration) + 'px' }"
-                class="my-event with-time"
-                @click="open(event)"
-
-                v-html="event.title"
-              ></div>
-            </template>
-          </template>
-          <!-- the events at the bottom (timed) -->
-          <template v-slot:day-body="{ timeToY, minutesToPixels }">
-
-              <!-- timed events -->
-              <!-- <div
-                v-if="event.time"
-                :key="facility.name"
-                :style="{ top: timeToY(event.time) + 'px', height: minutesToPixels( facility.today ) + 'px' }"
-                class="my-event with-time"
-                @click="open(event)"
-                v-html="event.title"
-              ></div> -->
-
-          </template>
-        </v-calendar>
-      </v-sheet>
-    </v-col>
-  </v-row>
+  <div id="app">
+    <AppointmentDialog :display='appointmentDialog' :event='selectedEvent' :facility='facility' @close='appointmentDialog = false'/>
+    <v-app id="inspire">
+      <v-row class="fill-height">
+        <v-col>
+          <v-sheet height="64">
+            <v-toolbar flat color="white">
+              <v-btn outlined class="mr-4" @click="setToday">Today</v-btn>
+              <v-btn fab text small @click="prev">
+                <v-icon small>mdi-chevron-left</v-icon>
+              </v-btn>
+              <v-btn fab text small @click="next">
+                <v-icon small>mdi-chevron-right</v-icon>
+              </v-btn>
+              <v-toolbar-title>{{ title }}</v-toolbar-title>
+            </v-toolbar>
+          </v-sheet>
+          <v-sheet height="600">
+            <v-calendar
+              ref="calendar"
+              v-model="focus"
+              color="primary"
+              :events="availableEvents"
+              :event-color="getEventColor"
+              :event-margin-bottom="3"
+              :now="today"
+              type="week"
+              :weekdays="days"
+              @click:event="showEvent"
+              @change="updateRange"
+            ></v-calendar>
+          </v-sheet>
+        </v-col>
+      </v-row>
+    </v-app>
+        {{facility}}
+    <br />
+    <br />
+    {{availableEvents}}
+  </div>
 </template>
 
 <script>
-//import { mapGetters } from "vuex";
+import AppointmentDialog from '@/components/AppointmentDialog.vue'
+import moment from 'moment'
 
-
-
-
-  export default {
-    name: "Calendar",
-    props: ['facility'],
-    methods: {
-      makeEnd(start, duration){
-         let date = new Date(start)
-         console.log('Data ' + date)
-         let d2 = new Date(date.getTime() + duration *60000)
-         let result =  d2.toISOString().substr(0, 10)
-         result += ' '
-         result +=d2.toISOString().substr(11, 5)
-         console.log('Result' + result)
-        return result
+export default {
+  name: "calendar",
+  props: {
+    facility: Object
+  },
+  data: () => ({
+    today: moment().format('YYYY-MM-DD'),
+    focus: moment().format('YYYY-MM-DD'),
+    start: null,
+    end: null,
+    days: [1, 2, 3, 4, 5],
+    appointmentDialog: false,
+    selectedEvent: null
+  }),
+  computed: {
+    title() {
+      const { start, end } = this;
+      if (!start || !end) {
+        return "";
       }
+
+      const startMonth = this.monthFormatter(start);
+      const endMonth = this.monthFormatter(end);
+      const suffixMonth = startMonth === endMonth ? "" : endMonth;
+
+      const startYear = start.year;
+      const endYear = end.year;
+      const suffixYear = startYear === endYear ? "" : endYear;
+
+      const startDay = start.day + this.nth(start.day);
+      const endDay = end.day + this.nth(end.day);
+
+      return `${startMonth} ${startDay} ${startYear} - ${suffixMonth} ${endDay} ${suffixYear}`;
     },
-    data: function() {
-      return {
-      // today: DateTime.Today(),
-      // events: this.appointments
-      today: '2019-01-08',
-      //todayDate: new Date().toISOString().substr(0, 10) /*'YYYY-MM-DD'*/ ,
-      events: [
-        {
-          name: "" + this.facility.name,
-          start: '2019-01-07 09:00',
-          end: '2019-01-07 10:00',
-        },
-        {
-          name: 'Thomas\' Birthday',
-          start: '2019-01-10',
-        },
-        {
-          name: 'Mash Potatoes',
-          start: '2019-01-09 ' + this.facility.openingHours[0].timeOpen,
-          end: this.makeEnd('2019-01-09 ' + this.facility.openingHours[0].timeOpen, this.facility.openingHours[0].duration),
-        },
-        {
-          name: 'closed',
-          start: '2019-01-11 00:00',
-          end: '2019-01-11 ' + this.facility.openingHours[0].timeOpen,
-        },
-        {
-          name: 'closedO',
-          start: this.makeEnd('2019-01-11 ' + this.facility.openingHours[0].timeOpen, this.facility.openingHours[0].duration),
-          end: '2019-01-11 23:59',
-        },
-      ],
-    }},
-    mounted () {
-      this.$refs.calendar.scrollToTime('08:00')
+    monthFormatter() {
+      return this.$refs.calendar.getFormatter({
+        timeZone: "UTC",
+        month: "long"
+      });
+    },
+    availableEvents() {
+      let availableSlots = [];
+      let generateOh = this.generateOpeningHours
+      let start = this.start
+      if (this.facility && start) {
+        this.facility.openingHours.forEach( oh => {
+          availableSlots.push(...generateOh(oh, start))
+        });
+      }
+      return availableSlots;
     }
-
+  },
+  mounted() {
+    this.$refs.calendar.checkChange();
+    this.$refs.calendar.scrollToTime("07:00");
+  },
+  methods: {
+    generateOpeningHours(openingHours, mondayDate) {
+      const events = []
+      let date = moment(`${mondayDate.date} ${openingHours.timeOpen}`, 'YYYY-MM-DD HH:mm')
+      date.add(openingHours.dayOfWeek - 1, 'days')
+      for(let i = 0; i < openingHours.duration / 60; i++) {
+        const start = date.format('YYYY-MM-DD HH:mm')
+        date.add(60, 'minutes')
+        const end = date.format('YYYY-MM-DD HH:mm')
+        events.push({name: 'Available', start, end, available: true})
+      }
+      return events
+    },
+    showEvent(event) {
+      this.appointmentDialog = false
+      this.appointmentDialog = true
+      this.selectedEvent = null
+      this.selectedEvent = event.event
+      console.log(JSON.stringify(event));
+    },
+    getEventColor(event) {
+      return event.available ? 'green' : 'red'
+    },
+    setToday() {
+      this.focus = this.today;
+    },
+    prev() {
+      this.$refs.calendar.prev();
+    },
+    next() {
+      this.$refs.calendar.next();
+    },
+    updateRange({ start, end }) {
+      // You could load events from an outside source (like database) now that we have the start and end dates on the calendar
+      this.start = start;
+      this.end = end;
+    },
+    nth(d) {
+      return d > 3 && d < 21
+        ? "th"
+        : ["th", "st", "nd", "rd", "th", "th", "th", "th", "th", "th"][d % 10];
+    }
+  },
+  components: {
+    AppointmentDialog
   }
+};
 </script>
-
-<style scoped>
-.my-event {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  border-radius: 2px;
-  background-color: #1867c0;
-  color: #ffffff;
-  border: 1px solid #1867c0;
-  font-size: 12px;
-  padding: 3px;
-  cursor: pointer;
-  margin-bottom: 1px;
-  left: 4px;
-  margin-right: 8px;
-  position: relative;
-}
-
-.my-event.with-time {
-  position: absolute;
-  right: 4px;
-  margin-right: 0px;
-}
-</style>
