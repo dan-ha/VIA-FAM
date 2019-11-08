@@ -11,18 +11,19 @@ const chromeOptions = {
  (async () => {
     const browser = await puppeteer.launch({headless:false});
     const page = await browser.newPage();
-    await page.setViewport({width:1535, height:756});
-
-    // take a ss of the home page
+    await page.setViewport({width:1535, height:756}); //larger viewport is unnecessary
+   
     await page.goto('http://localhost:8080');
     await page.screenshot({path:'home.png'});
    // take a ss of the register facility page
     await page.goto('http://localhost:8080/register', {waitUntil: 'networkidle2'}); //networkidle2 means 'wait until everything loads'
     await page.screenshot({path:'home.png', fullsceen: true});
+    await page.waitFor(2000);
 
     // waits for page page
-    //await page.waitForSelector('#input-15');
-    //focuses
+    //await page.waitForSelector('#input-12');
+    
+    //focuses the element for inputting a facility name
     await page.focus('#input-12');
     await page.keyboard.type("test facility");
     await page.screenshot({path:'fName.png', fullsceen: true});
