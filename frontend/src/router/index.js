@@ -37,23 +37,15 @@ const router = new Router({
     {
       path: '/facility/:name',
       name: 'facilityDetails',
-      component: () => import('@/views/FacilityDetails.vue')
+      component: () => import('@/views/FacilityDetails.vue'),
+      beforeEnter: requireAuth
     },
     {
-      path: '/facility/:calendar',
+      path: '/facility/:name/calendar',
       name: 'facilityCalendar',
-      component: () => import('@/views/FacilityCalendar.vue')
-    },
-    {
-      path: '/calendar/:facility',
-      name: 'calendar',
-      component: () => import('@/views/FacilityCalendar.vue')
-    },
-    {
-      path: '/administratorpanel',
-      name: 'administratorpanel',
-      component: () => import('@/views/AdministratorPanel.vue')
-    }        
+      component: () => import('@/views/FacilityCalendar.vue'),
+      beforeEnter: requireAuth
+    }
   ]
 })
 
