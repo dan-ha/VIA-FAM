@@ -34,10 +34,14 @@ export default {
     }
   },
   methods: {
-    ...mapActions(["fetchFacility"]),
-  },
-  created() {
-    this.fetchFacility(this.$route.params.name)
+    showCalendar(){
+      console.log(this.facility.name + 'a')
+      var fac = this.facility.name
+      this.$router.push('/')  // without this, it doesn't go back
+      this.$router.push({name: 'calendar', params:{facility: fac}})
+      //console.log(this.facility.name + 'b')
+    }
   }
 };
+
 </script>

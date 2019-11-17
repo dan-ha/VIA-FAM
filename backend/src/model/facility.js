@@ -35,6 +35,8 @@ const Facility = sequelize.define('facilities', {
     timestamps: false,
 })
 
+    
+
 const OpeningHours = sequelize.define('openingHours', {
     dayOfWeek: {
         type: Sequelize.TINYINT,
@@ -102,6 +104,17 @@ const Appointment = sequelize.define('appointments', {
 }, {
     timestamps: false,
 })
+
+const Calendar = sequelize.define('calendar', {
+
+    calendarInfo: {
+        type: Sequelize.STRING,
+        primaryKey: true
+    }
+},{
+    timestamps: false,
+})
+
 
 Facility.hasMany(OpeningHours)
 Facility.hasMany(Facilitator)

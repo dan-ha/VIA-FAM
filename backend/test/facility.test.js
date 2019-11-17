@@ -132,4 +132,29 @@ describe('route /facility', async function () {
     })
   })
 
+  describe('DELETE /facility/:name', function () {
+    it('should delete already registered facility', function (done) {
+      request(app)
+        .delete(`/facility/${facility.name}`)
+        .set('Accept', 'application/json')
+        .expect('Content-Type', /json/)
+        .expect(200)
+        .end(function (err, res) {
+          should.not.exist(err)
+          should.equal(res.body.name, facility.name)
+          done()
+        })
+    })
+    it('should return 404 for not registered facility', function (done) {
+      request(app)
+        .get('/facility/NonExisting')
+        .set('Accept', 'application/json')
+        .expect(404)
+        .end(function (err, res) {
+          should.not.exist(err)
+          done()
+        })
+    })
+  })
+
 })

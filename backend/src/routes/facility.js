@@ -161,6 +161,40 @@ router.patch('/:name', async (req, res) => {
 
 /**
  * @swagger
+ * /facility/{name}:
+ *  delete:
+ *    description: Delete facility with given name
+ *    parameters:
+ *      - in: path
+ *        name: name
+ *        required: true
+ *        schema:
+ *          type: string
+ *        description: The facility name
+ *    responses:
+ *      '200':
+ *        description: successful operation
+ *        schema:
+ *          $ref: '#/definitions/Facility'
+ *      '404':
+ *        description: Facility with the given name was not found
+ */
+router.delete('/:name', (req, res) => {
+  let { name } = req.params
+  Facility.findByPk(name, { include: [OpeningHours, Facilitator, Service] }).then((facility) => {
+    if (facility) {
+      let facilityString = JSON.stringify(facility)
+      facility.destroy({ force:true })
+      res.status(200).json(JSON.parse(facilityString))
+
+    } else {
+      res.status(404).send()
+    }
+  })
+})
+
+/**
+ * @swagger
  *
  *  definitions:
  *      Facility:
