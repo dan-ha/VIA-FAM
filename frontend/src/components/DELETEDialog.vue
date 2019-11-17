@@ -5,7 +5,7 @@
     </template>
     <v-card>
       <v-card-title>
-        <div class="headline">{{facilityName}}</div>
+        <div class="headline">Delete {{facilityName}} ?</div>
       </v-card-title>
       <v-card-text>
         <p>Deleting this facility will remove all it's data.</p>
