@@ -1,45 +1,39 @@
 <template>
   <v-container>
     <h1>Admin Panel</h1>
-    <v-data-table
-    :headers="headers"
-    :items="facilities"
-    :items-per-page="10"
-    class="elevation-1"
-  >
-        <template v-slot:top>
+    <v-data-table :headers="headers" :items="facilities" :items-per-page="10" class="elevation-1">
+      <template v-slot:top>
         <v-toolbar flat color="white">
           <v-toolbar-title>Facilities</v-toolbar-title>
           <v-spacer></v-spacer>
-          <RegisterFacilityDialog @registered="fetchFacilities"/>
+          <RegisterFacilityDialog @registered="fetchFacilities" />
         </v-toolbar>
       </template>
-    <template v-slot:item.appointmentManager="{ item }">
-      <AMDialog 
-        v-if="!item.appointmentManager"
-        btnLabel='Activate' 
-        v-bind:facilityName='item.name'
-        @activated="fetchFacilities"
-      />
-      <v-label 
-        v-else>
-      Activated
-      </v-label>
-         
-      <DELETEDialog 
-        btnLabel='DELETE' 
-        v-bind:facilityName='item.name'
-        @deleted="fetchFacilities"
-      />
+      <template v-slot:item.appointmentManager="{ item }">
+        <AMDialog
+          v-if="!item.appointmentManager"
+          btnLabel="Activate"
+          v-bind:facilityName="item.name"
+          @activated="fetchFacilities"
+        />
+        <v-label v-else>Activated</v-label>
       </template>
-  </v-data-table>
+
+      <template v-slot:item.delete="{ item }">
+        <DELETEDialog
+          btnLabel="DELETE"
+          v-bind:facilityName="item.name"
+          @deleted="fetchFacilities"
+        />
+      </template>
+    </v-data-table>
   </v-container>
 </template>
 <script>
-import AMDialog from '@/components/AMDialog.vue'
-import DELETEDialog from '@/components/DELETEDialog.vue'
-import RegisterFacilityDialog from '@/components/RegisterFacilityDialog.vue'
-import { mapGetters, mapActions } from "vuex"
+import AMDialog from "@/components/AMDialog.vue";
+import DELETEDialog from "@/components/DELETEDialog.vue";
+import RegisterFacilityDialog from "@/components/RegisterFacilityDialog.vue";
+import { mapGetters, mapActions } from "vuex";
 
 export default {
   name: "adminPanel",
@@ -50,21 +44,22 @@ export default {
     return {
       headers: [
         {
-            text: 'Facility',
-            align: 'left',
-            sortable: false,
-            value: 'name',
-          },
-          { text: 'Location', value: 'location' },
-          { text: 'Appointment Manager', value: 'appointmentManager' },
+          text: "Facility",
+          align: "left",
+          sortable: false,
+          value: "name"
+        },
+        { text: "Location", value: "location" },
+        { text: "Appointment Manager", value: "appointmentManager" },
+        { text: "delete", value: "delete" },
       ]
-    }
+    };
   },
   methods: {
     ...mapActions(["fetchFacilities"])
   },
   created() {
-    this.fetchFacilities()
+    this.fetchFacilities();
   },
   components: {
     RegisterFacilityDialog,
@@ -73,3 +68,4 @@ export default {
   }
 };
 </script>
+
