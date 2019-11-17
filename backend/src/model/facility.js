@@ -25,10 +25,17 @@ const Facility = sequelize.define('facilities', {
     additionalInfo: {
         type: Sequelize.STRING,
         allowNull: true
+    },
+    appointmentManager: {
+        type: Sequelize.BOOLEAN,
+        allowNull: false,
+        defaultValue: false
     }
 }, {
     timestamps: false,
 })
+
+    
 
 const OpeningHours = sequelize.define('openingHours', {
     dayOfWeek: {
@@ -56,9 +63,22 @@ const Facilitator = sequelize.define('facilitators', {
     timestamps: false,
 })
 
+const Service = sequelize.define('services', {
+    service: {
+        type: Sequelize.STRING,
+        allowNull: false
+    }
+}, {
+    timestamps: false
+})
+
 const Appointment = sequelize.define('appointments', {
     date: {
         type: Sequelize.DATE,
+        allowNull: false
+    },
+    duration: {
+        type: Sequelize.INTEGER,
         allowNull: false
     },
     location: {
@@ -76,29 +96,30 @@ const Appointment = sequelize.define('appointments', {
     document: {
         type: Sequelize.BLOB,
         allowNull: true
+    },
+    studentId: {
+        type: Sequelize.STRING,
+        allowNull: false
     }
 }, {
     timestamps: false,
 })
 
-const UnavailableHours = sequelize.define('unavailableHours', {
-    date: {
-        type: Sequelize.DATE,
-        allowNull: false
-    },
-    duration: {
-        type: Sequelize.INTEGER,
-        allowNull: false
+const Calendar = sequelize.define('calendar', {
+
+    calendarInfo: {
+        type: Sequelize.STRING,
+        primaryKey: true
     }
-}, {
+},{
     timestamps: false,
 })
+
 
 Facility.hasMany(OpeningHours)
 Facility.hasMany(Facilitator)
+Facility.hasMany(Service)
 Facilitator.hasMany(Appointment)
-Facilitator.hasMany(UnavailableHours)
 sequelize.sync()
 
-
-module.exports = { Facility, OpeningHours }
+module.exports = { Facility, OpeningHours, Facilitator, Service, Appointment }
