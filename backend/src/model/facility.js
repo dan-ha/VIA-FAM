@@ -115,15 +115,6 @@ const Calendar = sequelize.define('calendar', {
     timestamps: false,
 })
 
-const Facilitator = sequelize.define('facilitator', {
-    facilitatorName:{
-        type: Sequelize.STRING,
-        primaryKey: true
-    },
-},{ 
-    timestamps: false,
-})
-
 
 Facility.hasMany(OpeningHours)
 Facility.hasMany(Facilitator)

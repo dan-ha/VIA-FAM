@@ -25,12 +25,19 @@
         v-else>
       Activated
       </v-label>
+         
+      <DELETEDialog 
+        btnLabel='DELETE' 
+        v-bind:facilityName='item.name'
+        @deleted="fetchFacilities"
+      />
       </template>
   </v-data-table>
   </v-container>
 </template>
 <script>
 import AMDialog from '@/components/AMDialog.vue'
+import DELETEDialog from '@/components/DELETEDialog.vue'
 import RegisterFacilityDialog from '@/components/RegisterFacilityDialog.vue'
 import { mapGetters, mapActions } from "vuex"
 
@@ -61,7 +68,8 @@ export default {
   },
   components: {
     RegisterFacilityDialog,
-    AMDialog
+    AMDialog,
+    DELETEDialog
   }
 };
 </script>

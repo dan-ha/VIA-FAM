@@ -37,4 +37,9 @@ async function getAppointments(facilitator) {
   return response.data
 }
 
-export default { register, activateAM, bookAppointment, getAppointments }
+async function deleteFacility(name){
+  const response = await axiosIns.delete(`/facility/${name}`)
+  return response.status==200 ? true : false
+}
+
+export default { register, activateAM, deleteFacility, bookAppointment, getAppointments }
