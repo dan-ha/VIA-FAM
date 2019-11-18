@@ -112,9 +112,15 @@ router.get('/:name', (req, res) => {
  *    produces:
  *      - application/json
  *    parameters:
- *      - name: body
+ *      - in: path
+ *        name: name
+ *        required: true
+ *        schema:
+ *          type: string
+ *        description: The facility name
+ *      - in: body
  *        description: Updated version of the facility
- *        in: body
+ *        name: body
  *        required: true
  *        schema:
  *          $ref: '#/definitions/Facility'
