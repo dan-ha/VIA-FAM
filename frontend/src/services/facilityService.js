@@ -28,10 +28,11 @@ async function bookAppointment(appointment) {
   return response.data
 }
 
-async function getAppointments(facilitator) {
+async function getAppointments(facilitator, student) {
   const response = await axiosIns.get('/appointment', {
     params: {
       facilitator,
+      student
     }
   })
   return response.data

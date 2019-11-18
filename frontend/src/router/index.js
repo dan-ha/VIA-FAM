@@ -45,6 +45,12 @@ const router = new Router({
       name: 'facilityCalendar',
       component: () => import('@/views/FacilityCalendar.vue'),
       beforeEnter: requireAuth
+    },
+    {
+      path: '/StudentAppointments',
+      name: 'StudentAppointments',
+      component: () => import ('@/views/StudentAppointments.vue'),
+      beforeEnter: requireAuth
     }
   ]
 })
