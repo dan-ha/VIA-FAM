@@ -23,6 +23,13 @@ async function activateAM(facilityName, ser, facilitatorUsernames) {
   return updated
 }
 
+async function editFacility(facility) {
+  let updated = await axiosIns.patch(`/facility/${facility.name}`, {
+    ...facility
+  })
+  return updated
+}
+
 async function bookAppointment(appointment) {
   const response = await axiosIns.post(`/appointment`, appointment)
   return response.data
@@ -43,4 +50,4 @@ async function deleteFacility(name){
   return response.status==200 ? true : false
 }
 
-export default { register, activateAM, deleteFacility, bookAppointment, getAppointments }
+export default { register, editFacility, activateAM, deleteFacility, bookAppointment, getAppointments }

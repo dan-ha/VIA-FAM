@@ -19,19 +19,21 @@
         <v-label v-else>Activated</v-label>
       </template>
 
-      <template v-slot:item.delete="{ item }">
-        <DELETEDialog
-          btnLabel="DELETE"
-          v-bind:facilityName="item.name"
-          @deleted="fetchFacilities"
-        />
+      <template v-slot:item.edit="{ item }">
+        <EditDialog btnLabel="Edit" v-bind:facility="item" @edited="fetchFacilities" />
       </template>
+
+      <template v-slot:item.delete="{ item }">
+        <DELETEDialog btnLabel="DELETE" v-bind:facilityName="item.name" @deleted="fetchFacilities" />
+      </template>
+
     </v-data-table>
   </v-container>
 </template>
 <script>
 import AMDialog from "@/components/AMDialog.vue";
 import DELETEDialog from "@/components/DELETEDialog.vue";
+import EditDialog from "@/components/EditDialog.vue";
 import RegisterFacilityDialog from "@/components/RegisterFacilityDialog.vue";
 import { mapGetters, mapActions } from "vuex";
 
@@ -51,7 +53,8 @@ export default {
         },
         { text: "Location", value: "location" },
         { text: "Appointment Manager", value: "appointmentManager" },
-        { text: "delete", value: "delete" },
+        { text: "edit", value: "edit" },
+        { text: "delete", value: "delete" }
       ]
     };
   },
@@ -64,7 +67,8 @@ export default {
   components: {
     RegisterFacilityDialog,
     AMDialog,
-    DELETEDialog
+    DELETEDialog,
+    EditDialog
   }
 };
 </script>
