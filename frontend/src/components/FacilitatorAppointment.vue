@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <h1>Appointment List</h1>
-    <v-data-table :headers="headers" :items="appointments" :items-per-page="10" class="elevation-1">
+    <v-data-table :headers="headers" :items="appointments" :items-per-page="10" class="elevation-1"  @click:row="showAppointment" >
       <template v-slot:top>
         <v-toolbar flat color="white">
           <v-toolbar-title>Appointments</v-toolbar-title>
@@ -13,22 +13,31 @@
         <v-btn color="blue" text @click="deleteAppointment(item)">Delete</v-btn>
       </template>
 
+
     </v-data-table>
+    <InformationDialog :display="display" :appointment="appointment" @close="display = false"/>
+
   </v-container>
 </template>
 
 <script>
 import { mapGetters } from "vuex";
 import facilityService from "@/services/facilityService.js";
+import InformationDialog from "@/components/InformationDialog.vue";
+
 
 export default {
-  name: "AppointmentList",
+  name: "FacilitatorAppointments",
     computed: {
     ...mapGetters(["user"])
   },
   data() {
     return {
       headers: [
+        {
+          text: "Student",
+          value: "studentId"
+        },
         {
           text: "Subject",
           value: "subject"
@@ -38,10 +47,19 @@ export default {
         { text: "Duration", value: "duration" },
         { text: "delete", value: "delete" }
       ],
-      appointments: []
+      appointments: [],
+      display:false,
+      appointment: null
     };
   },
   methods: {
+    showAppointment(item) {
+      this.appointment = null
+      this.appointment = item
+      this.display=true
+      console.log( this.appointment)
+      console.log('Show appointment')
+    },
     async deleteAppointment( appointment ) {
       try {
         if(await facilityService.deleteAppointment(appointment.id)){
@@ -52,11 +70,12 @@ export default {
       }
     },
     async fetchAppointemnts() {
-      this.appointments = await facilityService.getAppointments(undefined, this.user.username)
+      this.appointments = await facilityService.getAppointments(this.user.username)
     }
   },
   async mounted() {
     await this.fetchAppointemnts()
   },
+  components:{InformationDialog}
 };
 </script>

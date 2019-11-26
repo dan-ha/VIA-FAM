@@ -51,6 +51,12 @@ const router = new Router({
       name: 'StudentAppointments',
       component: () => import ('@/views/StudentAppointments.vue'),
       beforeEnter: requireAuth
+    },
+    {
+      path: '/FacilitatorAppointments',
+      name: 'FacilitatorAppointments',
+      component: () => import ('@/views/FacilitatorAppointments.vue'),
+      beforeEnter: requireAuth
     }
   ]
 })
