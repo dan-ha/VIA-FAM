@@ -107,6 +107,39 @@ router.get('/:id', async (req, res) => {
 
 /**
  * @swagger
+ * /appointment/{id}:
+ *  delete:
+ *    description: Delete appointment with given id
+ *    parameters:
+ *      - in: path
+ *        name: id
+ *        required: true
+ *        schema:
+ *          type: string
+ *        description: The appointment id
+ *    responses:
+ *      '200':
+ *        description: successful operation
+ *        schema:
+ *          $ref: '#/definitions/Appointment'
+ *      '404':
+ *        description: Appointment with the given id was not found
+ */
+router.delete('/:id', (req, res) => {
+  let { id } = req.params
+  Appointment.findByPk(id).then((appointment) => {
+    if (appointment) {
+      let appointmentString = JSON.stringify(appointment)
+      appointment.destroy({ force:true })
+      res.status(200).json(JSON.parse(appointmentString))
+    } else {
+      res.status(404).send()
+    }
+  })
+})
+
+/**
+ * @swagger
  *
  *  definitions:
  *      Appointment:
