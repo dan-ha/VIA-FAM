@@ -23,7 +23,7 @@
                 ></v-text-field>
               </v-col>
               <v-col cols="12">
-                <OpeningHours ref="openingHours"></OpeningHours>
+                <OpeningHoursComponent ref="openingHours" :openingHours="facility.openingHours"></OpeningHoursComponent>
               </v-col>
               <v-col cols="12">
                 <v-text-field
@@ -72,11 +72,13 @@
 </template>
 
 <script>
-import OpeningHours from "@/components/OpeningHours.vue";
+import OpeningHours from '@/model/OpeningHours.js'
 import facilityService from "@/services/facilityService.js";
 
+import OpeningHoursComponent from "@/components/openingHours/OpeningHours.vue";
+
 export default {
-  name: "FacilityRegisterDialog",
+  name: "EditFacilityDialog",
     props: {
     btnLabel: String,
     facility: Object
@@ -120,13 +122,7 @@ export default {
       return {
         name: this.facility.name,
         description: this.description,
-        openingHours: [
-          {
-            dayOfWeek: 1,
-            timeOpen: this.$refs.openingHours.timeFrom,
-            duration: 180
-          }
-        ],
+        openingHours: this.$refs.openingHours.getOpeningHours(),
         emailAddress: this.email,
         phoneNo: this.phone,
         location: this.location,
@@ -135,7 +131,7 @@ export default {
     }
   },
   components: {
-    OpeningHours
+    OpeningHoursComponent
   }
 };
 </script>

@@ -68,7 +68,7 @@ export default {
     focus: moment().format("YYYY-MM-DD"),
     start: null,
     end: null,
-    days: [1, 2, 3, 4, 5],
+    days: [1, 2, 3, 4, 5, 6, 0],
     appointmentDialog: false,
     selectedEvent: null,
     appointments: []

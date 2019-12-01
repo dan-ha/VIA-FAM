@@ -5,7 +5,7 @@
     </template>
     <v-card>
       <v-card-title>
-        <div class="headline">Register New VIA Facility</div>
+        <div class="headline">Register new VIA Facility</div>
       </v-card-title>
       <v-card-text>
         <v-container>
@@ -23,7 +23,7 @@
                 ></v-text-field>
               </v-col>
               <v-col cols="12">
-                <OpeningHours ref="openingHours"></OpeningHours>
+                <OpeningHoursComponent ref="openingHours"></OpeningHoursComponent>
               </v-col>
               <v-col cols="12">
                 <v-text-field
@@ -72,8 +72,10 @@
 </template>
 
 <script>
-import OpeningHours from "@/components/OpeningHours.vue";
+import OpeningHours from '@/model/OpeningHours.js'
 import facilityService from "@/services/facilityService.js";
+
+import OpeningHoursComponent from "@/components/openingHours/OpeningHours.vue";
 
 export default {
   name: "FacilityRegisterDialog",
@@ -123,13 +125,7 @@ export default {
       return {
         name: this.name,
         description: this.description,
-        openingHours: [
-          {
-            dayOfWeek: 1,
-            timeOpen: this.$refs.openingHours.timeFrom,
-            duration: 180
-          }
-        ],
+        openingHours: this.$refs.openingHours.getOpeningHours(),
         emailAddress: this.email,
         phoneNo: this.phone,
         location: this.location,
@@ -138,7 +134,7 @@ export default {
     }
   },
   components: {
-    OpeningHours
+    OpeningHoursComponent
   }
 };
 </script>
