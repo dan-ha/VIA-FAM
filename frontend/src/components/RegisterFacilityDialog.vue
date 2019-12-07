@@ -60,7 +60,7 @@
             </v-row>
           </v-form>
         </v-container>
-        <v-alert v-model="alert" type="error" dismissible>An error occured</v-alert>
+        <v-alert v-model="alert" type="error" dismissible>An error occured. Please check for duplicates or incorrect information.</v-alert>
       </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>

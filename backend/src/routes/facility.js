@@ -1,6 +1,7 @@
 const express = require('express')
 const { Facility, OpeningHours, Facilitator, Service } = require('../model/facility.js')
 const sequelize = require('../db/sequelize.js')
+const sendMailTo = require('../emailNotifications/emailer.js')
 
 const router = express.Router();
 
@@ -152,6 +153,7 @@ router.patch('/:name', async (req, res) => {
             }
           })
       })
+      sendMailTo(facility.emailAddress, "FacilityEdited")
       await facility.reload()
       res.send(facility)
     } else {

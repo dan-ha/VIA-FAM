@@ -16,7 +16,6 @@
                 <v-autocomplete
                   v-model="services"
                   :items="allServices"
-                  :rules="requiredRules"
                   label="Pick Services"
                   multiple
                   chips

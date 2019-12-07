@@ -14,7 +14,12 @@ async function register(facility) {
 
 async function activateAM(facilityName, ser, facilitatorUsernames) {
   const facilitators = facilitatorUsernames.map(u => ({facilityName, employeeId: u}))
-    const services = ser.map(s => ({facilityName, service: s}))
+    const services = ser.map(s => {
+      if(s != null)
+      return {facilityName, service: s} 
+      else 
+      return {facilityName, service: ["Appointment"]}
+    })
   let updated = await axiosIns.patch(`/facility/${facilityName}`, {
     services,
     facilitators,

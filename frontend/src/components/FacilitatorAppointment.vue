@@ -10,7 +10,7 @@
       </template>
 
       <template v-slot:item.delete="{ item }">
-        <v-btn color="blue" text @click="deleteAppointment(item)">Delete</v-btn>
+        <v-btn color="blue" text @click="deleteAppointment(item, $event)">Delete</v-btn>
       </template>
 
 
@@ -60,7 +60,8 @@ export default {
       console.log( this.appointment)
       console.log('Show appointment')
     },
-    async deleteAppointment( appointment ) {
+    async deleteAppointment( appointment, event) {
+      event.stopPropagation()
       try {
         if(await facilityService.deleteAppointment(appointment.id)){
           await this.fetchAppointemnts()
