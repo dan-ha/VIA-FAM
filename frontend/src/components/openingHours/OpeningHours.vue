@@ -2,7 +2,7 @@
   <div>
     Opening hours:
     <div v-for="n in days" v-bind:key="n">
-      <OpeningHoursDay v-if="n <= openingHours.length" ref="day" :openingHour="openingHours[n-1]"></OpeningHoursDay>
+      <OpeningHoursDay v-if="n <= oh.length" ref="day" :openingHour="oh[n-1]"></OpeningHoursDay>
       <OpeningHoursDay v-else ref="day"></OpeningHoursDay>
     </div>
     <v-btn @click="addDay">+ Add</v-btn>
@@ -19,7 +19,13 @@ import OpeningHoursDay from "@/components/openingHours/OpeningHoursDay.vue";
 export default {
   name: "OpeningHours",
   props: {
-    openingHours: Array
+    openingHours: Array,
+    default: []
+  },
+  computed: {
+    oh() {
+      return this.openingHours ? this.openingHours : []
+    }
   },
   components: {
     OpeningHoursDay
