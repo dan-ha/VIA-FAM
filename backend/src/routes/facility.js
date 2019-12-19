@@ -140,16 +140,18 @@ router.patch('/:name', async (req, res) => {
     let facility = await Facility.findByPk(req.params.name, { include: [OpeningHours, Facilitator, Service] })
     if (facility) {
       await sequelize.transaction(transaction => {
-        if(req.body.name) delete req.body.name
+        if (req.body.name) delete req.body.name
         return Facility.update(req.body, { where: { name: req.params.name } }, transaction)
-          .then(transaction => {
+          .then(async transaction => {
+            if (req.body.openingHours) {
+              await OpeningHours.destroy({ where: { facilityName: req.params.name } }, transaction)
+              await OpeningHours.bulkCreate(req.body.openingHours.map(o => ({ ...o, facilityName: req.params.name })), transaction)
+            }
             if (req.body.facilitators) {
-              return Facilitator.bulkCreate(req.body.facilitators, transaction)
-                .then(transaction => {
-                  if(req.body.services) {
-                    return Service.bulkCreate(req.body.services, transaction)
-                  }
-                })
+              await Facilitator.bulkCreate(req.body.facilitators, transaction)
+            }
+            if (req.body.services) {
+              await Service.bulkCreate(req.body.services, transaction)
             }
           })
       })
@@ -192,7 +194,7 @@ router.delete('/:name', (req, res) => {
   Facility.findByPk(name, { include: [OpeningHours, Facilitator, Service] }).then((facility) => {
     if (facility) {
       let facilityString = JSON.stringify(facility)
-      facility.destroy({ force:true })
+      facility.destroy({ force: true })
       res.status(200).json(JSON.parse(facilityString))
 
     } else {

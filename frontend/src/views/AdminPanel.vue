@@ -1,12 +1,17 @@
 <template>
   <v-container>
     <h1>Admin Panel</h1>
-    <v-data-table :headers="headers" :items="facilities" :items-per-page="10" class="elevation-1">
+    <v-data-table
+      :headers="headers"
+      :items="facilities"
+      :items-per-page="10"
+      class="elevation-1"
+    >
       <template v-slot:top>
         <v-toolbar flat color="white">
           <v-toolbar-title>Facilities</v-toolbar-title>
           <v-spacer></v-spacer>
-          <RegisterFacilityDialog @registered="fetchFacilities" />
+          <FacilityRegisterDialog @registered="fetchFacilities" />
         </v-toolbar>
       </template>
       <template v-slot:item.appointmentManager="{ item }">
@@ -20,21 +25,20 @@
       </template>
 
       <template v-slot:item.edit="{ item }">
-        <EditDialog btnLabel="Edit" v-bind:facility="item" @edited="fetchFacilities" />
+        <FacilityEditDialog btnLabel="Edit" v-bind:facility="item" @edited="fetchFacilities"/>
       </template>
 
       <template v-slot:item.delete="{ item }">
         <DELETEDialog btnLabel="DELETE" v-bind:facilityName="item.name" @deleted="fetchFacilities" />
       </template>
-
     </v-data-table>
   </v-container>
 </template>
 <script>
 import AMDialog from "@/components/AMDialog.vue";
 import DELETEDialog from "@/components/DELETEDialog.vue";
-import EditDialog from "@/components/EditDialog.vue";
-import RegisterFacilityDialog from "@/components/RegisterFacilityDialog.vue";
+import FacilityRegisterDialog from "@/components/FacilityRegisterDialog.vue";
+import FacilityEditDialog from "@/components/FacilityEditDialog.vue";
 import { mapGetters, mapActions } from "vuex";
 
 export default {
@@ -53,22 +57,22 @@ export default {
         },
         { text: "Location", value: "location" },
         { text: "Appointment Manager", value: "appointmentManager" },
-        { text: "edit", value: "edit" },
-        { text: "delete", value: "delete" }
+        { text: "Edit", value: "edit" },
+        { text: "Delete", value: "delete" }
       ]
     };
   },
   methods: {
-    ...mapActions(["fetchFacilities"])
+    ...mapActions(["fetchFacilities"]),
   },
   created() {
     this.fetchFacilities();
   },
   components: {
-    RegisterFacilityDialog,
-    AMDialog,
+    FacilityRegisterDialog,
+    FacilityEditDialog,
     DELETEDialog,
-    EditDialog
+    AMDialog
   }
 };
 </script>

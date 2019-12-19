@@ -2,11 +2,15 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
 
+import Facility from '../model/Facility.js'
+
 Vue.use(Vuex)
 
 export default new Vuex.Store({
     state: {
         facilities: [],
+        facilitators: [],
+        appointments: [],
         loading: false,
         error: "",
         authenticated: localStorage['authenticated'] ? JSON.parse(localStorage['authenticated']) : false,
@@ -24,8 +28,9 @@ export default new Vuex.Store({
         API_DATA_PENDING: (state) => {
             state.loading = true
         },
-        API_DATA_SUCCESS: (state, facilities) => {
+        API_DATA_SUCCESS: (state, data) => {
             state.loading = false
+            let facilities = data.map(d => new Facility(d))
             state.facilities = facilities
         },
         API_DATA_FAILURE: (state, error) => {

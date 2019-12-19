@@ -1,18 +1,18 @@
 <template>
   <v-dialog v-model="dialog" persistent max-width="600px">
     <template v-slot:activator="{ on }">
-      <v-btn color="primary" dark v-on="on">Register new Facility</v-btn>
+      <v-btn color="primary" dark v-on="on">{{btnLabel}}</v-btn>
     </template>
     <v-card>
       <v-card-title>
-        <div class="headline">Register New VIA Facility</div>
+        <div class="headline">Edit VIA Facility</div>
       </v-card-title>
       <v-card-text>
         <v-container>
           <v-form ref="form">
             <v-row>
               <v-col cols="12">
-                <v-text-field v-model="name" :rules="nameRules" counter="100" label="Facility name"></v-text-field>
+                <v-text-field v-model="facility.name" label="Facility name" disabled></v-text-field>
               </v-col>
               <v-col cols="12">
                 <v-text-field
@@ -23,7 +23,7 @@
                 ></v-text-field>
               </v-col>
               <v-col cols="12">
-                <OpeningHours ref="openingHours"></OpeningHours>
+                <OpeningHoursComponent ref="openingHours" :openingHours="facility.openingHours"></OpeningHoursComponent>
               </v-col>
               <v-col cols="12">
                 <v-text-field
@@ -60,51 +60,51 @@
             </v-row>
           </v-form>
         </v-container>
-        <v-alert v-model="alert" type="error" dismissible>An error occured. Please check for duplicates or incorrect information.</v-alert>
+        <v-alert v-model="alert" type="error" dismissible>An error occured</v-alert>
       </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
         <v-btn color="blue" text @click="close">Close</v-btn>
-        <v-btn color="blue" text @click="register">Register</v-btn>
+        <v-btn color="blue" text @click="edit">Edit</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
 </template>
 
 <script>
-import OpeningHours from "@/components/OpeningHours.vue";
+import OpeningHours from '@/model/OpeningHours.js'
 import facilityService from "@/services/facilityService.js";
 
+import OpeningHoursComponent from "@/components/openingHours/OpeningHours.vue";
+
 export default {
-  name: "FacilityRegisterDialog",
+  name: "EditFacilityDialog",
+    props: {
+    btnLabel: String,
+    facility: Object
+  },
   data() {
     return {
       dialog: false,
-      name: "",
-      nameRules: [
-        v => !!v || "Name is required",
-        v => (v && v.length >= 3) || "Name must be 3 or more characters",
-        v => (v && v.length <= 100) || "Name must be less than 100 characters"
-      ],
-      description: "",
+      description: this.facility.description,
       descriptionRules: [v => !!v || "Description is required"],
-      email: "email@address.com",
+      email: this.facility.emailAddress,
       emailRules: [v => /.+@.+\..+/.test(v) || "E-mail must be valid"],
-      phone: "45000000",
+      phone: this.facility.phoneNo,
       phoneRules: [v => /^[0-9]*$/.test(v) || "Phone number must be valid"],
-      location: "D.301",
+      location: this.facility.location,
       locationRules: [v => !!v || "Location is required"],
-      additionalInfo: "Additional information about the facility",
+      additionalInfo: this.facility.additionalInfo,
       alert: false
     };
   },
   methods: {
-    async register() {
+    async edit() {
       if (this.$refs.form.validate()) {
         try {
-          await facilityService.register(this.getFacility());
+          await facilityService.editFacility(this.getFacility());
           this.reset();
-          this.$emit("registered");
+          this.$emit("edited");
         } catch (error) {
           this.alert = true;
           console.log(error);
@@ -115,21 +115,14 @@ export default {
       this.reset();
     },
     reset() {
-      this.$refs.form.reset();
       this.alert = false;
       this.dialog = false;
     },
     getFacility() {
       return {
-        name: this.name,
+        name: this.facility.name,
         description: this.description,
-        openingHours: [
-          {
-            dayOfWeek: 1,
-            timeOpen: this.$refs.openingHours.timeFrom,
-            duration: 180
-          }
-        ],
+        openingHours: this.$refs.openingHours.getOpeningHours(),
         emailAddress: this.email,
         phoneNo: this.phone,
         location: this.location,
@@ -138,7 +131,7 @@ export default {
     }
   },
   components: {
-    OpeningHours
+    OpeningHoursComponent
   }
 };
 </script>
