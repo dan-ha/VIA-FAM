@@ -1,5 +1,6 @@
 const express = require('express')
 const { Appointment } = require('../model/facility.js')
+const sendMailTo = require('../emailNotifications/emailer.js')
 
 const router = express.Router()
 
@@ -131,6 +132,7 @@ router.delete('/:id', (req, res) => {
     if (appointment) {
       let appointmentString = JSON.stringify(appointment)
       appointment.destroy({ force:true })
+      sendMailTo(appointment.studentId + '@via.dk', "editApp")
       res.status(200).json(JSON.parse(appointmentString))
     } else {
       res.status(404).send()
