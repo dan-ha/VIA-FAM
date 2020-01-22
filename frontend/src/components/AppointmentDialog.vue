@@ -55,6 +55,7 @@
 </template>
 
 <script>
+import moment from 'moment';
 import { mapGetters } from "vuex";
 import facilityService from "@/services/facilityService.js";
 
@@ -92,6 +93,7 @@ export default {
   methods: {
     async book() {
       if (this.$refs.form.validate()) {
+        console.log(this.getAppointment())
         try {
           let res = await facilityService.bookAppointment(
             this.getAppointment()
@@ -117,7 +119,7 @@ export default {
     },
     getAppointment() {
       return {
-        date: new Date(this.from).toISOString(),
+        date: moment(this.from, "YYYY-MM-DD HH:mm").toISOString(),
         duration: 60,
         location: this.optionalLocation ? this.optionalLocation : this.location,
         subject: this.subject,
